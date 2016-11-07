@@ -1,0 +1,20 @@
+require('nn')
+require('dpnn')
+function makeModel()
+cnn = nn.Sequential()
+cnn:add(nn.SpatialConvolution(4,8,3,3,1,1))
+cnn:add(nn.ReLU())
+cnn:add(nn.SpatialConvolution(8,16,3,3,1,1))
+cnn:add(nn.ReLU())
+cnn:add(nn.SpatialMaxPooling(3,3,3,3))
+outsize = cnn:outside{4,200,200}
+cnn:add(nn.Collapse(3))
+cnn:add(nn.Linear(outsize[1]*outsize[2]*outsize[3],512))
+cnn:add(nn.ReLU())
+cnn:add(nn.Linear(512,256))
+cnn:add(nn.ReLU())
+cnn:add(nn.Linear(256,2))
+cnn:add(nn.LogSoftMax())
+local crit = nn.ClassNLLCriterion()
+return cnn, crit
+end
