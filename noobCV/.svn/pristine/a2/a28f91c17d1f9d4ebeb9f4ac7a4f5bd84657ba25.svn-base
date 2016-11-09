@@ -1,0 +1,11 @@
+echo hi
+for folder in $(ls -p)
+do
+	echo $folder
+	cd $folder
+	for file in $(ls -p | grep -v / | tail -100)
+	do
+		mv $file ..
+	done
+	cd ..
+done
